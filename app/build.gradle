@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.financeapp'
+    namespace 'com.example.College_Details'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.financeapp"
+        applicationId "com.example.College_Details"
         minSdk 24
         targetSdk 34
         versionCode 1

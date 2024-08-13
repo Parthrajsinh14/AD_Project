@@ -1,7 +1,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <bitmap
-            android:src="@drawable/c8mdm2m7"
+            android:src="@drawable/new_bg"
             android:scaleType="centerCrop" />
     </item>
     <item>

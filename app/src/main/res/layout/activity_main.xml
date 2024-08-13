@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_bg"
@@ -19,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="@string/login"
             android:textSize="28sp"
             android:textColor="@android:color/white"
             android:layout_gravity="center"
@@ -32,11 +33,12 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/round_edittext"
             android:hint="Username"
+            android:importantForAutofill="no"
             android:inputType="text"
             android:padding="12dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            />
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/password"
@@ -49,7 +51,8 @@
             android:textColorHint="@color/black"
             android:inputType="textPassword"
             android:padding="12dp"
-            android:textColorLink="#000000" />
+            android:textColorLink="#000000"
+            tools:ignore="Autofill,HardcodedText" />
 
         <Button
             android:id="@+id/loginButton"
@@ -57,10 +60,10 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/black"
             android:padding="12dp"
-
             android:text="Login"
             android:textColor="@android:color/white"
-            app:cornerRadius="16dp" />
+            app:cornerRadius="16dp"
+            tools:ignore="HardcodedText" />
 
 
         <TextView
@@ -70,8 +73,8 @@
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="Register here."
-            />
+            android:text="Register here"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/Guest"
@@ -80,8 +83,8 @@
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="Or Continue as guest."
-            />
+            android:text="Or Continue as guest"
+            tools:ignore="HardcodedText" />
 
 
     </LinearLayout>

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CollegeDetails</string>
+
+    <string name="Or_Continue_as_guest">Or Continue as guest.</string>
+
+    <string name="Register_here">Register here.</string>
+    <string name="login">Login</string>
 </resources>
