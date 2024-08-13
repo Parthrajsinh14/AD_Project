@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap
+            android:src="@drawable/c8mdm2m7"
+            android:scaleType="centerCrop" />
+    </item>
+    <item>
+        <color android:color="#0000ffff" /> <!-- Add a semi-transparent overlay -->
+    </item>
+</layer-list>
