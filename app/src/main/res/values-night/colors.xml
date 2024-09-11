@@ -3,7 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="purple">#6d77fb</color>
-    <color name="cardTextColor">#FF000000</color>
-    <color name="cardIcon">#6d77fb</color>
-    <color name="cardBackground">#FFFFFFFF</color>
+    <color name="cardTextColor">#FFFFFFFF</color>
+    <color name="cardBackground">#333333 </color>
 </resources>
