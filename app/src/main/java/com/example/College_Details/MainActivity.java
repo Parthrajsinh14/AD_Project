@@ -10,7 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,24 +29,29 @@ public class MainActivity extends AppCompatActivity {
     private TextView reg,guestlog;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    FirebaseAuth mauth;
+
+    protected void onStart() {
+        super.onStart();
+        //Logic if user is already logged in
+        FirebaseUser currentUser = mauth.getCurrentUser();
+        if(currentUser!=null){
+            Intent intent = new Intent(getApplicationContext(), DashBoard.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = getSharedPreferences("login_details",MODE_PRIVATE);
-        boolean loggedIn = sharedPreferences.getBoolean("isLoggedIn",false);
 
-        if(loggedIn){
-            intent = new Intent(MainActivity.this,DashBoard.class);
-            startActivity(intent);
-            finish();
-        }
-
+        // Initialize all the objects
+        mauth = FirebaseAuth.getInstance();
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
-        //errorMessageTextView = findViewById(R.id.errorMessage);
         Button loginButton = findViewById(R.id.loginButton);
         reg=(TextView)findViewById(R.id.Register);
         guestlog=(TextView) findViewById(R.id.Guest);
@@ -49,23 +62,35 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = usernameEditText.getText().toString();
+                String email = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-
-                if (username.equals("admin") && password.equals("admin")) {
-                    // Proceed to the next activity or dashboard
-                    editor.putString("username",username);
-                    editor.putBoolean("isLoggedIn",true);
-                    editor.commit();
-                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, DashBoard.class);
-                    startActivity(intent);
-                    finish();
+                if(email.isEmpty() || password.isEmpty()){
+                    Toast.makeText(MainActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 } else {
-                    //errorMessageTextView.setText("Invalid username or password.");
-                    //errorMessageTextView.setVisibility(View.VISIBLE);
-                    Toast.makeText(MainActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+
+                    //Login Using Firebase
+                    mauth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success
+                                Toast.makeText(MainActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                intent = new Intent(MainActivity.this,DashBoard.class);
+                                editor.putString("username",email);
+                                editor.putBoolean("isLoggedIn",true);
+                                editor.commit();
+                                startActivity(intent);
+                                finish();
+
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                String error = task.getException().toString();
+                                Toast.makeText(MainActivity.this, "Login failed. "+error,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -73,11 +98,6 @@ public class MainActivity extends AppCompatActivity {
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                //Work after firebase connection
-
-
                 intent=new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 finish();
