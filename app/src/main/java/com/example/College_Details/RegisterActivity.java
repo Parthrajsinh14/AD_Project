@@ -1,4 +1,4 @@
-package com.example.College_Details;
+    package com.example.College_Details;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
