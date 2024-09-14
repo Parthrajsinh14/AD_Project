@@ -44,16 +44,22 @@
         </activity>
         <activity
             android:name=".DashBoard"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.CollegeDetails.NoActionBar"
+            />
         <activity
             android:name=".DataBase"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.CollegeDetails.NoActionBar"
+            />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.CollegeDetails.NoActionBar"
+            />
     </application>
 
 </manifest>

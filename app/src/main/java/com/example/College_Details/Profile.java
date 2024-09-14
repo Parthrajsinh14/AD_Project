@@ -1,6 +1,7 @@
 package com.example.College_Details;
 
 import android.os.Bundle;
+import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +21,13 @@ public class Profile extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Profile");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Optional: to show the back button
+        }
+
+
     }
+
 }
