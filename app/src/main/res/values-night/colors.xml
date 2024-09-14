@@ -5,4 +5,8 @@
     <color name="purple">#6d77fb</color>
     <color name="cardTextColor">#FFFFFFFF</color>
     <color name="cardBackground">#333333 </color>
+
+    <color name="backgroundColor">#121212</color>  <!-- Dark Background -->
+    <color name="textColor">#FFFFFF</color>        <!-- White Text -->
+    <color name="buttonColor">#009688</color>
 </resources>

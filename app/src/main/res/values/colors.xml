@@ -6,4 +6,14 @@
     <color name="cardTextColor">#FF000000</color>
     <color name="cardIcon">#6d77fb</color>
     <color name="cardBackground">#FFFFFFFF</color>
+    <!-- colors.xml -->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#009688</color>
+
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="textColor">#000000</color>
+    <color name="buttonColor">#009688</color>
+
+
 </resources>
