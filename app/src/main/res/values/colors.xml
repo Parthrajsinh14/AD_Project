@@ -15,5 +15,12 @@
     <color name="textColor">#000000</color>
     <color name="buttonColor">#009688</color>
 
+    <color name="cardBackgroundColor">#FFFFFF</color> <!-- White color for light theme -->
+
+    <!-- Text Colors -->
+    <color name="secondaryTextColor">#555555</color> <!-- Dark gray color for secondary text -->
+    <color name="tertiaryTextColor">#888888</color>
+    <color name="indicatorColor">#555555</color>
+
 
 </resources>
