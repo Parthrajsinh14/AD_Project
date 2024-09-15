@@ -1,6 +1,9 @@
 package com.example.College_Details;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CollegeList extends AppCompatActivity {
     CollegeAdapter collegeAdapter;
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +31,7 @@ public class CollegeList extends AppCompatActivity {
             return insets;
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewColleges);
+        recyclerView = findViewById(R.id.recyclerViewColleges);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseRecyclerOptions<CollegeModel> options =
@@ -44,6 +48,43 @@ public class CollegeList extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         collegeAdapter.startListening();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search,menu);
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+
+        assert searchView != null;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                collegeSearch(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                collegeSearch(s);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    private void collegeSearch(String text){
+        FirebaseRecyclerOptions<CollegeModel> options =
+                new FirebaseRecyclerOptions.Builder<CollegeModel>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("college").orderByChild("name").startAt(text).endAt(text+"~"),CollegeModel.class)
+                        .build();
+
+        collegeAdapter = new CollegeAdapter(options);
+        collegeAdapter.startListening();
+        recyclerView.setAdapter(collegeAdapter);
     }
 
     @Override
