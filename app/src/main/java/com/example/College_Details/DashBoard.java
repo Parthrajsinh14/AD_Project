@@ -1,20 +1,33 @@
 package com.example.College_Details;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class DashBoard extends AppCompatActivity {
 
     private CardView collegeList,branchList,universityList,keyDates,admissionSteps,profile;
     private Intent intent;
+    private DatabaseReference databaseReference;
+    private String name,email,mobile;
+    private double spi;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +40,16 @@ public class DashBoard extends AppCompatActivity {
             return insets;
         });
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
         collegeList = findViewById(R.id.college_list);
         branchList = findViewById(R.id.branch_list);
         universityList = findViewById(R.id.university_list);
         keyDates = findViewById(R.id.key_dates);
         admissionSteps = findViewById(R.id.admission_steps);
         profile = findViewById(R.id.profile);
+        sharedPreferences = getSharedPreferences("user_details",MODE_PRIVATE);
+        String user_email = sharedPreferences.getString("email","");
+        fetchUser("harshil@gmail.com");
 
         collegeList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +90,44 @@ public class DashBoard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 intent = new Intent(DashBoard.this,Profile.class);
+                intent.putExtra("name", name);
+                intent.putExtra("email", email);
+                intent.putExtra("mobile", mobile);
+                intent.putExtra("spi", spi);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private  void fetchUser(String findEmail){
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean userFound = false;
+
+                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    UserModel user = dataSnapshot.getValue(UserModel.class);
+                    if(user!=null && user.getEmail().equals(findEmail)) {
+                        name = user.getName();
+                        email = user.getEmail();
+                        mobile = user.getMobile();
+                        spi = user.getSpi();
+
+                        Toast.makeText(DashBoard.this, "Data Fetched Successfully", Toast.LENGTH_LONG).show();
+                        userFound = true;
+//                        Profile profile = new Profile();
+//                        profile.setProfile(name,email,mobile,spi);
+                        break;
+                    }
+                }
+                if(!userFound){
+                    //Toast.makeText(Profile.this, "No user found with this email", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(DashBoard.this, "Error Fetching Data", Toast.LENGTH_SHORT).show();
             }
         });
     }
