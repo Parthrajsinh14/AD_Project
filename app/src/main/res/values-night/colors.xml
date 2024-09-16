@@ -9,4 +9,11 @@
     <color name="backgroundColor">#121212</color>  <!-- Dark Background -->
     <color name="textColor">#FFFFFF</color>        <!-- White Text -->
     <color name="buttonColor">#009688</color>
+
+    <color name="cardBackgroundColor">#333333</color> <!-- Dark gray for dark theme -->
+
+    <!-- Text Colors -->
+    <color name="secondaryTextColor">#CCCCCC</color> <!-- Light gray for secondary text in dark theme -->
+    <color name="tertiaryTextColor">#AAAAAA</color>
+    <color name="indicatorColor">#CCCCCC</color>
 </resources>

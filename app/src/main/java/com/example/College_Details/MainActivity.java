@@ -19,6 +19,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     Intent intent;
     private TextView reg,guestlog;
     FirebaseAuth mauth;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
 
     protected void onStart() {
         super.onStart();
@@ -48,12 +56,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize all the objects
         mauth = FirebaseAuth.getInstance();
+
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.loginButton);
         reg=(TextView)findViewById(R.id.Register);
         guestlog=(TextView) findViewById(R.id.Guest);
-
+        sharedPreferences = getSharedPreferences("user_details",MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success
                                 Toast.makeText(MainActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                editor.putString("email",email);
+                                editor.commit();
                                 intent = new Intent(MainActivity.this,DashBoard.class);
                                 startActivity(intent);
                                 finish();
@@ -107,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
+
+
+
 }
