@@ -27,8 +27,6 @@ public class RegisterActivity extends AppCompatActivity {
     Button Reg;
     private TextView loginPage;
     Intent intent;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
     @Override
     protected void onStart() {
         //Logic if user is already logged in
@@ -53,8 +51,6 @@ public class RegisterActivity extends AppCompatActivity {
         Password = findViewById(R.id.password1);
         loginPage = findViewById(R.id.loginPage);
         Reg = findViewById(R.id.register);
-        sharedPreferences = getSharedPreferences("user_details",MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
         loginPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,8 +79,6 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 //FirebaseUser user = mAuth.getCurrentUser();
-                                editor.putString("email",email);
-                                editor.commit();
                                 Toast.makeText(RegisterActivity.this, "User Registered Successfully", Toast.LENGTH_SHORT).show();
                                 intent = new Intent(RegisterActivity.this,DashBoard.class);
                                 startActivity(intent);

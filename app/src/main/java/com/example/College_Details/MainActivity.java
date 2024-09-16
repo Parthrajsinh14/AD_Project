@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     Intent intent;
     private TextView reg,guestlog;
     FirebaseAuth mauth;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
 
 
     protected void onStart() {
@@ -62,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.loginButton);
         reg=(TextView)findViewById(R.id.Register);
         guestlog=(TextView) findViewById(R.id.Guest);
-        sharedPreferences = getSharedPreferences("user_details",MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success
                                 Toast.makeText(MainActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                                editor.putString("email",email);
-                                editor.commit();
                                 intent = new Intent(MainActivity.this,DashBoard.class);
                                 startActivity(intent);
                                 finish();

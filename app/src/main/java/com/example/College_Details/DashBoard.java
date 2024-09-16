@@ -14,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +29,7 @@ public class DashBoard extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String name,email,mobile;
     private double spi;
-    SharedPreferences sharedPreferences;
+    FirebaseAuth mauth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +49,19 @@ public class DashBoard extends AppCompatActivity {
         keyDates = findViewById(R.id.key_dates);
         admissionSteps = findViewById(R.id.admission_steps);
         profile = findViewById(R.id.profile);
-        sharedPreferences = getSharedPreferences("user_details",MODE_PRIVATE);
-        String user_email = sharedPreferences.getString("email","");
-        fetchUser(user_email);
+        mauth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mauth.getCurrentUser();
+
+        if(currentUser != null){
+            fetchUser(currentUser.getEmail());
+        } else {
+            name = " ";
+            email = " ";
+            mobile = " ";
+            spi = 0;
+        }
+
+
 
         collegeList.setOnClickListener(new View.OnClickListener() {
             @Override
