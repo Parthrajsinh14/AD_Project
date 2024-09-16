@@ -49,7 +49,7 @@ public class DashBoard extends AppCompatActivity {
         profile = findViewById(R.id.profile);
         sharedPreferences = getSharedPreferences("user_details",MODE_PRIVATE);
         String user_email = sharedPreferences.getString("email","");
-        fetchUser("harshil@gmail.com");
+        fetchUser(user_email);
 
         collegeList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,13 +115,11 @@ public class DashBoard extends AppCompatActivity {
 
                         Toast.makeText(DashBoard.this, "Data Fetched Successfully", Toast.LENGTH_LONG).show();
                         userFound = true;
-//                        Profile profile = new Profile();
-//                        profile.setProfile(name,email,mobile,spi);
                         break;
                     }
                 }
                 if(!userFound){
-                    //Toast.makeText(Profile.this, "No user found with this email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DashBoard.this, "No user found with this email "+findEmail, Toast.LENGTH_SHORT).show();
                 }
             }
 
