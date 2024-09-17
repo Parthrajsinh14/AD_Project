@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,9 +30,9 @@ public class Profile extends AppCompatActivity {
     TextView nameValue,emailValue,mobileValue,spiValue;
     Button logout;
     FirebaseAuth mauth;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
     Intent intent;
+    FirebaseUser currentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,28 +56,30 @@ public class Profile extends AppCompatActivity {
         spiValue = findViewById(R.id.spiValue);
         logout = findViewById(R.id.btnLogout);
         mauth = FirebaseAuth.getInstance();
-        sharedPreferences = getSharedPreferences("user_details",MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        currentUser = mauth.getCurrentUser();
 
+        if(currentUser == null){
+            setProfile("NO NAME","---","---",0.0);
+            logout.setText("LOGIN");
+        } else {
+            intent = getIntent();
+            String name = intent.getStringExtra("name");
+            String email = intent.getStringExtra("email");
+            String mobile = intent.getStringExtra("mobile");
+            double spi = intent.getDoubleExtra("spi", 0);
+            setProfile(name,email,mobile,spi);
+        }
 
-        intent = getIntent();
-        String name = intent.getStringExtra("name");
-        String email = intent.getStringExtra("email");
-        String mobile = intent.getStringExtra("mobile");
-        double spi = intent.getDoubleExtra("spi", 0);
-
-        setProfile(name,email,mobile,spi);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mauth.signOut();
-                editor.clear();
-                editor.commit();
+                if(currentUser!=null){
+                    mauth.signOut();
+                }
                 intent = new Intent(Profile.this,MainActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
@@ -92,8 +95,6 @@ public class Profile extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Error in fetching Data", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
 }
