@@ -21,6 +21,7 @@
     <color name="secondaryTextColor">#555555</color> <!-- Dark gray color for secondary text -->
     <color name="tertiaryTextColor">#888888</color>
     <color name="indicatorColor">#555555</color>
+    <color name="circleColor">#2196F3</color>
 
 
 </resources>
