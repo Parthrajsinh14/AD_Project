@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.orhanobut.dialogplus.DialogPlus;
 
 public class BranchAdapter extends FirebaseRecyclerAdapter<BranchModel, BranchAdapter.viewHolder> {
 
@@ -77,6 +78,11 @@ public class BranchAdapter extends FirebaseRecyclerAdapter<BranchModel, BranchAd
 
         if(holder.edit != null){
             holder.edit.setOnClickListener(view -> {
+                final DialogPlus dialogPlus = DialogPlus.newDialog(holder.name.getContext())
+                        .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.update_popup_branch))
+                        .setExpanded(true,1200).create();
+
+                dialogPlus.show();
                 Toast.makeText(view.getContext(), "Edit Clicked", Toast.LENGTH_SHORT).show();
             });
         }

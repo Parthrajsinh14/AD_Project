@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.orhanobut.dialogplus.DialogPlus;
 
 public class UniversityAdapter extends FirebaseRecyclerAdapter<UniversityModel, UniversityAdapter.viewHolder> {
 
@@ -77,6 +78,11 @@ public class UniversityAdapter extends FirebaseRecyclerAdapter<UniversityModel, 
         });
         if(holder.edit != null){
             holder.edit.setOnClickListener(view -> {
+                final DialogPlus dialogPlus = DialogPlus.newDialog(holder.name.getContext())
+                        .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.update_popup_university))
+                        .setExpanded(true,1000).create();
+
+                dialogPlus.show();
                 Toast.makeText(view.getContext(), "Edit CLicked", Toast.LENGTH_SHORT).show();
             });
         }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.orhanobut.dialogplus.DialogPlus;
 
 public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, CollegeAdapter.ViewHolder> {
 
@@ -74,7 +75,13 @@ public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, Colleg
 
         if(holder.edit != null){
             holder.edit.setOnClickListener(view -> {
+                final DialogPlus dialogPlus = DialogPlus.newDialog(holder.name.getContext())
+                                .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.update_popup_college))
+                                .setExpanded(true,1200).create();
+
+                dialogPlus.show();
                 Toast.makeText(view.getContext(), "Edit Clicked", Toast.LENGTH_SHORT).show();
+
             });
         }
         if(holder.delete != null){
@@ -88,7 +95,7 @@ public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, Colleg
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView name, fees, branch, indicator;
-        Button edit = null,delete=null;
+        Button edit,delete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,10 +104,7 @@ public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, Colleg
             branch = itemView.findViewById(R.id.textViewCollegeBranches);
             edit = itemView.findViewById(R.id.buttonEdit);
             delete = itemView.findViewById(R.id.buttonDelete);
-            // Only find the indicator in the admin layout
-            if (itemView.findViewById(R.id.textViewIndicator) != null) {
-                indicator = itemView.findViewById(R.id.textViewIndicator);
-            }
+            indicator = itemView.findViewById(R.id.textViewIndicator);
         }
     }
 }
