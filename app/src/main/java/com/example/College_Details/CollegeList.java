@@ -39,7 +39,7 @@ public class CollegeList extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("college"),CollegeModel.class)
                         .build();
 
-        collegeAdapter = new CollegeAdapter(options);
+        collegeAdapter = new CollegeAdapter(options,1);
         recyclerView.setAdapter(collegeAdapter);
 
     }
@@ -82,14 +82,9 @@ public class CollegeList extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("college").orderByChild("name").startAt(text).endAt(text+"~"),CollegeModel.class)
                         .build();
 
-        collegeAdapter = new CollegeAdapter(options);
+        collegeAdapter = new CollegeAdapter(options,1);
         collegeAdapter.startListening();
         recyclerView.setAdapter(collegeAdapter);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        collegeAdapter.startListening();
-    }
 }

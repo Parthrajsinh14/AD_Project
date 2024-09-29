@@ -40,7 +40,7 @@ public class UniversityList extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("university"),UniversityModel.class)
                         .build();
 
-        universityAdapter = new UniversityAdapter(options);
+        universityAdapter = new UniversityAdapter(options,1);
         recyclerView.setAdapter(universityAdapter);
     }
 
@@ -48,12 +48,6 @@ public class UniversityList extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         universityAdapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        universityAdapter.stopListening();
     }
 
     @Override
@@ -88,7 +82,7 @@ public class UniversityList extends AppCompatActivity {
                         .build();
 
 
-        universityAdapter = new UniversityAdapter(options);
+        universityAdapter = new UniversityAdapter(options,1);
         universityAdapter.startListening();
         recyclerView.setAdapter(universityAdapter);
     }

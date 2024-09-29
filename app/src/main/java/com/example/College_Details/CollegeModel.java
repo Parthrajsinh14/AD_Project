@@ -1,17 +1,26 @@
 package com.example.College_Details;
 
 public class CollegeModel {
-    String name,branch;
+    String name,branch,link;
     int fees;
 
     CollegeModel(){
 
     }
 
-    public CollegeModel(String name, String branch, int fees) {
+    public CollegeModel(String name, String branch, String link, int fees) {
         this.name = name;
         this.branch = branch;
+        this.link = link;
         this.fees = fees;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getName() {
