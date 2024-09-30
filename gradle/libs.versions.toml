@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.2"
+dialogplus = "1.11"
 firebaseBom = "33.2.0"
 firebaseBomVersion = "33.3.0"
 firebaseUiDatabase = "8.0.2"
@@ -15,6 +16,7 @@ firebaseAuth = "23.0.0"
 firebaseDatabase = "21.0.0"
 
 [libraries]
+dialogplus = { module = "com.orhanobut:dialogplus", version.ref = "dialogplus" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-bom-v3330 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 firebase-ui-database = { module = "com.firebaseui:firebase-ui-database", version.ref = "firebaseUiDatabase" }

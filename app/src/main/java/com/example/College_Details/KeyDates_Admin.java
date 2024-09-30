@@ -1,6 +1,7 @@
 package com.example.College_Details;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,23 +14,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class KeyDates extends AppCompatActivity {
+public class KeyDates_Admin extends AppCompatActivity {
 
     KeyDatesAdapter keyDatesAdapter;
     RecyclerView recyclerView;
+    Button addKeyDates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_key_dates);
+        setContentView(R.layout.activity_key_dates_admin);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-
+        addKeyDates = findViewById(R.id.buttonAddKeyDate);
         recyclerView = findViewById(R.id.recyclerViewKeyDates);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -53,4 +55,5 @@ public class KeyDates extends AppCompatActivity {
         super.onStop();
         keyDatesAdapter.stopListening();
     }
+
 }

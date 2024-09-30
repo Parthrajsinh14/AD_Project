@@ -3,6 +3,7 @@ package com.example.College_Details;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
@@ -16,38 +17,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class UniversityList extends AppCompatActivity {
+public class BranchList_Admin extends AppCompatActivity {
 
-    UniversityAdapter universityAdapter;
+    BranchAdapter branchAdapter;
     RecyclerView recyclerView;
+    Button addBranch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_university_list);
+        setContentView(R.layout.activity_branch_list_admin);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        recyclerView = findViewById(R.id.recyclerViewUniversity);
+        addBranch = findViewById(R.id.buttonAddBranch);
+        recyclerView = findViewById(R.id.recyclerViewBranches);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseRecyclerOptions<UniversityModel> options =
-                new FirebaseRecyclerOptions.Builder<UniversityModel>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("university"),UniversityModel.class)
+        FirebaseRecyclerOptions<BranchModel> options =
+                new FirebaseRecyclerOptions.Builder<BranchModel>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("branch"),BranchModel.class )
                         .build();
 
-        universityAdapter = new UniversityAdapter(options,1);
-        recyclerView.setAdapter(universityAdapter);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        universityAdapter.startListening();
+        branchAdapter = new BranchAdapter(options,1);
+        recyclerView.setAdapter(branchAdapter);
     }
 
     @Override
@@ -61,13 +58,13 @@ public class UniversityList extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                searchUniversity(s);
+                searchBranch(s);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                searchUniversity(s);
+                searchBranch(s);
                 return false;
             }
         });
@@ -75,16 +72,20 @@ public class UniversityList extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void searchUniversity(String text){
-        FirebaseRecyclerOptions<UniversityModel> options =
-                new FirebaseRecyclerOptions.Builder<UniversityModel>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("university").orderByChild("name").startAt(text).endAt(text+"~"),UniversityModel.class)
+    private void searchBranch(String text){
+        FirebaseRecyclerOptions<BranchModel> options =
+                new FirebaseRecyclerOptions.Builder<BranchModel>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("branch").orderByChild("name").startAt(text).endAt(text+"~"),BranchModel.class )
                         .build();
 
-
-        universityAdapter = new UniversityAdapter(options,1);
-        universityAdapter.startListening();
-        recyclerView.setAdapter(universityAdapter);
+        branchAdapter = new BranchAdapter(options,1);
+        branchAdapter.startListening();
+        recyclerView.setAdapter(branchAdapter);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        branchAdapter.startListening();
+    }
 }

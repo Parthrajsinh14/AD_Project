@@ -8,17 +8,30 @@
     android:padding="16dp"
     android:id="@+id/main"
     android:background="@color/backgroundColor"
-    tools:context=".KeyDates">
+    tools:context=".KeyDates_Admin">
 
-    <!-- RecyclerView to display the list of colleges -->
+    <!-- RecyclerView to display the list of key dates -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewKeyDates"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@+id/buttonAddKeyDate"/>
+
+    <!-- Add Key Date Button -->
+    <Button
+        android:id="@+id/buttonAddKeyDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Key Date"
+        android:background="@android:color/holo_green_dark"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

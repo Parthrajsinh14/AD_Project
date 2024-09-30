@@ -1,55 +1,109 @@
 package com.example.College_Details;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.orhanobut.dialogplus.DialogPlus;
 
-public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel,CollegeAdapter.viewHolder> {
+public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, CollegeAdapter.ViewHolder> {
+
+    // Define view types
+    private static final int VIEW_TYPE_ADMIN = 1;
+    private static final int VIEW_TYPE_COLLEGE = 2;
+    private int layoutType;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
      * @param options
+     * @param layoutType Layout type to use (1 for admin layout, 2 for normal college layout)
      */
-    public CollegeAdapter(@NonNull FirebaseRecyclerOptions<CollegeModel> options) {
+    public CollegeAdapter(@NonNull FirebaseRecyclerOptions<CollegeModel> options, int layoutType) {
         super(options);
+        this.layoutType = layoutType;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull CollegeModel model) {
-        holder.name.setText(model.getName());
-        holder.fees.setText(String.valueOf(model.getFees()));
-        holder.branch.setText(model.getBranch());
-        holder.indicator.setText(">");
+    public int getItemViewType(int position) {
+        // Return the layout type passed in the constructor
+        return layoutType;
     }
 
     @NonNull
     @Override
-    public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_college,parent,false);
-
-        return new viewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+        // Inflate the correct layout based on the view type
+        if (viewType == VIEW_TYPE_ADMIN) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_college_admin, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_college, parent, false);
+        }
+        return new ViewHolder(view);
     }
 
-    class viewHolder extends RecyclerView.ViewHolder{
+    @Override
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull CollegeModel model) {
+        holder.name.setText(model.getName());
+        holder.fees.setText("Fees :- "+model.getFees());
+        holder.branch.setText(model.getBranch());
+        String url = model.getLink();
 
-        TextView name,fees,branch,indicator;
+        // Set the indicator only if it's the admin layout
+        if (layoutType == VIEW_TYPE_ADMIN) {
+            holder.indicator.setText(">");
+        }
 
-        public viewHolder(@NonNull View itemView) {
+        holder.itemView.setOnClickListener(v -> {
+            Context context = v.getContext();
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            context.startActivity(intent);
+        });
+
+        if(holder.edit != null){
+            holder.edit.setOnClickListener(view -> {
+                final DialogPlus dialogPlus = DialogPlus.newDialog(holder.name.getContext())
+                                .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.update_popup_college))
+                                .setExpanded(true,1200).create();
+
+                dialogPlus.show();
+                Toast.makeText(view.getContext(), "Edit Clicked", Toast.LENGTH_SHORT).show();
+
+            });
+        }
+        if(holder.delete != null){
+            holder.delete.setOnClickListener(view -> {
+                Toast.makeText(view.getContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+    // ViewHolder class for managing views
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView name, fees, branch, indicator;
+        Button edit,delete;
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             name = itemView.findViewById(R.id.textViewCollegeName);
             fees = itemView.findViewById(R.id.textViewCollegeFees);
             branch = itemView.findViewById(R.id.textViewCollegeBranches);
+            edit = itemView.findViewById(R.id.buttonEdit);
+            delete = itemView.findViewById(R.id.buttonDelete);
             indicator = itemView.findViewById(R.id.textViewIndicator);
         }
     }

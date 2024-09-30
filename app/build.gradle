@@ -41,6 +41,7 @@ dependencies {
     implementation(platform(libs.firebase.bom.v3330))
     implementation(libs.google.firebase.database)
     implementation libs.firebase.ui.database
+    implementation libs.dialogplus
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
