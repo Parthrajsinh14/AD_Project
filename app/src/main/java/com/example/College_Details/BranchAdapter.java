@@ -1,12 +1,15 @@
 package com.example.College_Details;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.orhanobut.dialogplus.DialogPlus;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BranchAdapter extends FirebaseRecyclerAdapter<BranchModel, BranchAdapter.viewHolder> {
 
@@ -82,13 +91,74 @@ public class BranchAdapter extends FirebaseRecyclerAdapter<BranchModel, BranchAd
                         .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.update_popup_branch))
                         .setExpanded(true,1200).create();
 
+
+                View view1 = dialogPlus.getHolderView();
+
+                EditText name = view1.findViewById(R.id.updateName);
+                EditText seats = view1.findViewById(R.id.updateSeats);
+                EditText colleges = view1.findViewById(R.id.updateColleges);
+                EditText link = view1.findViewById(R.id.updateLink);
+                Button update = view1.findViewById(R.id.btnUpdate);
+
+                name.setText(model.getName());
+                seats.setText(String.valueOf(model.getSeat()));
+                colleges.setText(String.valueOf(model.getCollege()));
+                link.setText(model.getLink());
+
                 dialogPlus.show();
-                Toast.makeText(view.getContext(), "Edit Clicked", Toast.LENGTH_SHORT).show();
+
+                update.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Map<String,Object> data = new HashMap<>();
+                        data.put("name",name.getText().toString());
+                        data.put("seat",Integer.parseInt(seats.getText().toString()));
+                        data.put("college",Integer.parseInt(colleges.getText().toString()));
+                        data.put("link",link.getText().toString());
+
+                        FirebaseDatabase.getInstance().getReference().child("branch")
+                                .child(getRef(holder.getBindingAdapterPosition()).getKey()).updateChildren(data)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(holder.name.getContext(), "Data Updated Successfully", Toast.LENGTH_SHORT).show();
+                                        dialogPlus.dismiss();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(holder.name.getContext(), "Data Updation Failed", Toast.LENGTH_SHORT).show();
+                                        dialogPlus.dismiss();
+                                    }
+                                });
+                    }
+                });
+
+                //Toast.makeText(view.getContext(), "Edit Clicked", Toast.LENGTH_SHORT).show();
             });
         }
         if(holder.delete != null){
             holder.delete.setOnClickListener(view -> {
-                Toast.makeText(view.getContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.name.getContext());
+                builder.setTitle("Are You Sure?");
+                builder.setMessage("Deleted Data can't be retrieved.");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseDatabase.getInstance().getReference().child("branch")
+                                .child(getRef(holder.getBindingAdapterPosition()).getKey()).removeValue();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(holder.name.getContext(), "You cancelled deletion", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.show();
             });
         }
     }

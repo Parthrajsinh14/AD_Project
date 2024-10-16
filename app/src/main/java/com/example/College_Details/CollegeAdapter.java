@@ -1,12 +1,15 @@
 package com.example.College_Details;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.orhanobut.dialogplus.DialogPlus;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, CollegeAdapter.ViewHolder> {
 
@@ -77,7 +86,54 @@ public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, Colleg
             holder.edit.setOnClickListener(view -> {
                 final DialogPlus dialogPlus = DialogPlus.newDialog(holder.name.getContext())
                                 .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.update_popup_college))
-                                .setExpanded(true,1200).create();
+                                .setExpanded(true,1200)
+                                .create();
+
+                View dailogView = dialogPlus.getHolderView();
+                EditText name = dailogView.findViewById(R.id.updateName);
+                EditText fees = dailogView.findViewById(R.id.updateFees);
+                EditText branch = dailogView.findViewById(R.id.updateBranch);
+                EditText link = dailogView.findViewById(R.id.updateLink);
+                Button update = dailogView.findViewById(R.id.btnUpdate);
+
+                name.setText(model.getName());
+                fees.setText(String.valueOf(model.getFees()));
+                branch.setText(model.getBranch());
+                link.setText(model.getLink());
+
+                update.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Map<String,Object> data = new HashMap<>();
+                        data.put("name",name.getText().toString());
+                        data.put("fees",Integer.parseInt(fees.getText().toString()));
+                        data.put("branch",branch.getText().toString());
+                        data.put("link",link.getText().toString());
+
+                        FirebaseDatabase.getInstance().getReference().child("college")
+                                .child(getRef(holder.getBindingAdapterPosition()).getKey()).updateChildren(data)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(holder.name.getContext(), "Data Updated Successfully", Toast.LENGTH_SHORT).show();
+                                        dialogPlus.dismiss();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(holder.name.getContext(), "Failed to Update Data", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
+
+                    }
+                });
+                dialogPlus.show();
+
+
+
 
                 dialogPlus.show();
                 Toast.makeText(view.getContext(), "Edit Clicked", Toast.LENGTH_SHORT).show();
@@ -86,7 +142,25 @@ public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, Colleg
         }
         if(holder.delete != null){
             holder.delete.setOnClickListener(view -> {
-                Toast.makeText(view.getContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.name.getContext());
+                builder.setTitle("Are You Sure?");
+                builder.setMessage("Deleted Data can't be retrieved.");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseDatabase.getInstance().getReference().child("college")
+                                .child(getRef(holder.getBindingAdapterPosition()).getKey()).removeValue();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(holder.name.getContext(), "You cancelled deletion", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.show();
             });
         }
     }

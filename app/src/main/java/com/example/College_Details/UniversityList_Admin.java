@@ -3,6 +3,7 @@ package com.example.College_Details;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SearchView;
 
@@ -26,14 +27,14 @@ public class UniversityList_Admin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        EdgeToEdge.enable(  this);
         setContentView(R.layout.activity_university_list_admin);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         addUniversity = findViewById(R.id.buttonAddUniversity);
         recyclerView = findViewById(R.id.recyclerViewUniversity);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

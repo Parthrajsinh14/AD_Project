@@ -1,12 +1,18 @@
 package com.example.College_Details;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class UniversityAdapter extends FirebaseRecyclerAdapter<UniversityModel, UniversityAdapter.viewHolder> {
 
@@ -61,10 +75,6 @@ public class UniversityAdapter extends FirebaseRecyclerAdapter<UniversityModel, 
         String collegeNumber = model.college + " Colleges";
         holder.colleges.setText(collegeNumber);
 
-        holder.edit.setOnClickListener(view -> {
-
-        });
-
         // Set the indicator only if it's the admin layout
         if (layoutType == VIEW_TYPE_ADMIN) {
             holder.indicator.setText(">");
@@ -76,20 +86,70 @@ public class UniversityAdapter extends FirebaseRecyclerAdapter<UniversityModel, 
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             context.startActivity(intent);
         });
-        if(holder.edit != null){
+
+        // Handle the Edit button
+        if (holder.edit != null) {
             holder.edit.setOnClickListener(view -> {
                 final DialogPlus dialogPlus = DialogPlus.newDialog(holder.name.getContext())
-                        .setContentHolder(new com.orhanobut.dialogplus.ViewHolder(R.layout.update_popup_university))
-                        .setExpanded(true,1000).create();
+                        .setContentHolder(new ViewHolder(R.layout.update_popup_university))
+                        .setExpanded(true,1000) // Adjust as needed
+                        .create();
+
+                View dialogView = dialogPlus.getHolderView();
+                EditText name = dialogView.findViewById(R.id.updateName);
+                EditText colleges = dialogView.findViewById(R.id.updateColleges);
+                EditText link = dialogView.findViewById(R.id.updateLink);
+                Button update = dialogView.findViewById(R.id.btnUpdate);
+
+                // Set the text fields with the model data
+                name.setText(model.getName());
+                colleges.setText(String.valueOf(model.getCollege()));
+                link.setText(model.getLink());
 
                 dialogPlus.show();
-                Toast.makeText(view.getContext(), "Edit CLicked", Toast.LENGTH_SHORT).show();
+
+                // Listen for layout changes to adjust for the keyboard
+                update.setOnClickListener(v -> {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("name", name.getText().toString());
+                    data.put("college", Integer.parseInt(colleges.getText().toString()));
+                    data.put("link", link.getText().toString());
+
+                    FirebaseDatabase.getInstance().getReference().child("university")
+                            .child(getRef(holder.getBindingAdapterPosition()).getKey()).updateChildren(data)
+                            .addOnSuccessListener(unused -> {
+                                Toast.makeText(holder.name.getContext(), "Data Updated Successfully", Toast.LENGTH_SHORT).show();
+                                dialogPlus.dismiss();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(holder.name.getContext(), "Data Update Failed", Toast.LENGTH_SHORT).show());
+                });
             });
         }
-        if(holder.delete != null){
+
+        // Handle the Delete button
+        if (holder.delete != null) {
             holder.delete.setOnClickListener(view -> {
-                Toast.makeText(view.getContext(), "Deletes Clicked", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.name.getContext());
+                builder.setTitle("Are You Sure?");
+                builder.setMessage("Deleted Data can't be retrieved.");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseDatabase.getInstance().getReference().child("university")
+                                .child(getRef(holder.getBindingAdapterPosition()).getKey()).removeValue();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(holder.name.getContext(), "You cancelled deletion", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.show();
             });
+
         }
     }
 
@@ -97,7 +157,7 @@ public class UniversityAdapter extends FirebaseRecyclerAdapter<UniversityModel, 
     class viewHolder extends RecyclerView.ViewHolder {
 
         TextView name, indicator, colleges;
-        Button edit,delete;
+        Button edit, delete;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
