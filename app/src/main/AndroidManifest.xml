@@ -15,6 +15,9 @@
         android:theme="@style/Theme.CollegeDetails"
         tools:targetApi="31">
         <activity
+            android:name=".Profile_Admin"
+            android:exported="false" />
+        <activity
             android:name=".AddBranch"
             android:exported="false" />
         <activity

@@ -113,7 +113,12 @@ public class DashBoard extends AppCompatActivity {
         });
 
         profile.setOnClickListener(view -> {
-            intent = new Intent(DashBoard.this, Profile.class);
+
+            if (admin != null && admin) {
+                intent = new Intent(DashBoard.this, Profile_Admin.class);
+            } else {
+                intent = new Intent(DashBoard.this, Profile.class);
+            }
             intent.putExtra("name", name != null ? name : "Unknown");
             intent.putExtra("email", email != null ? email : "No Email");
             String mobileStr = (mobile != null) ? mobile.toString() : "0";
