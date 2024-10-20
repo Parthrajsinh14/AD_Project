@@ -40,7 +40,7 @@ public class BranchList extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("branch"),BranchModel.class )
                         .build();
 
-        branchAdapter = new BranchAdapter(options,1);
+        branchAdapter = new BranchAdapter(options,2);
         recyclerView.setAdapter(branchAdapter);
     }
 
@@ -75,7 +75,7 @@ public class BranchList extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("branch").orderByChild("name").startAt(text).endAt(text+"~"),BranchModel.class )
                         .build();
 
-        branchAdapter = new BranchAdapter(options,1);
+        branchAdapter = new BranchAdapter(options,2);
         branchAdapter.startListening();
         recyclerView.setAdapter(branchAdapter);
     }

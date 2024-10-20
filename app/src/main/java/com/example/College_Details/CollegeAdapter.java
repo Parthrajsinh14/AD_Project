@@ -56,7 +56,7 @@ public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, Colleg
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         // Inflate the correct layout based on the view type
-        if (viewType == VIEW_TYPE_ADMIN) {
+        if (viewType == 1) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_college_admin, parent, false);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_college, parent, false);
@@ -125,9 +125,6 @@ public class CollegeAdapter extends FirebaseRecyclerAdapter<CollegeModel, Colleg
                                         Toast.makeText(holder.name.getContext(), "Failed to Update Data", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-
-
-
                     }
                 });
                 dialogPlus.show();

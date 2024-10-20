@@ -57,7 +57,7 @@ public class BranchAdapter extends FirebaseRecyclerAdapter<BranchModel, BranchAd
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         // Inflate the correct layout based on the view type
-        if (viewType == VIEW_TYPE_ADMIN) {
+        if (viewType == 1) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_branch_admin, parent, false);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_branch, parent, false);

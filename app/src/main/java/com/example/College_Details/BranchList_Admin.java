@@ -1,8 +1,10 @@
 package com.example.College_Details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
 
@@ -15,13 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class BranchList_Admin extends AppCompatActivity {
 
     BranchAdapter branchAdapter;
     RecyclerView recyclerView;
-    Button addBranch;
+    FloatingActionButton addBranch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +37,17 @@ public class BranchList_Admin extends AppCompatActivity {
             return insets;
         });
 
-        addBranch = findViewById(R.id.buttonAddBranch);
+        addBranch = findViewById(R.id.addBranch);
         recyclerView = findViewById(R.id.recyclerViewBranches);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        addBranch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(BranchList_Admin.this,AddBranch.class));
+            }
+        });
 
         FirebaseRecyclerOptions<BranchModel> options =
                 new FirebaseRecyclerOptions.Builder<BranchModel>()

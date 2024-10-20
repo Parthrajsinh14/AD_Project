@@ -41,7 +41,7 @@ public class UniversityList extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("university"),UniversityModel.class)
                         .build();
 
-        universityAdapter = new UniversityAdapter(options,1);
+        universityAdapter = new UniversityAdapter(options,2);
         recyclerView.setAdapter(universityAdapter);
     }
 

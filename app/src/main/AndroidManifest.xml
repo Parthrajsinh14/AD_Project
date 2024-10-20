@@ -14,11 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CollegeDetails"
         tools:targetApi="31">
-
+        <activity
+            android:name=".AddBranch"
+            android:exported="false" />
+        <activity
+            android:name=".AddCollege"
+            android:exported="false" />
+        <activity
+            android:name=".AddUniversity"
+            android:exported="false" />
         <activity
             android:name=".UniversityList_Admin"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".KeyDates_Admin"
             android:exported="false" />
