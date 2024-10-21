@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"
+        android:textColor="@color/black"
         android:layout_marginRight="10dp"
         android:background="@drawable/rounded"
         android:gravity="center"
@@ -38,17 +39,18 @@
         android:textSize="20sp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="Fees" />
+        android:text="Mobile Number" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"
-        android:inputType="number"
+        android:textColor="@color/black"
         android:layout_marginRight="10dp"
         android:background="@drawable/rounded"
         android:gravity="center"
-        android:id="@+id/updateFees" />
+        android:id="@+id/updateMobile" />
+
 
     <TextView
         android:layout_width="match_parent"
@@ -57,34 +59,17 @@
         android:textSize="20sp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="Branch" />
+        android:text="SPI" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:textColor="@color/black"
         android:background="@drawable/rounded"
         android:gravity="center"
-        android:id="@+id/updateBranch" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:text="Website Link" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/rounded"
-        android:gravity="center"
-        android:id="@+id/updateLink" />
+        android:id="@+id/updateSpi" />
 
     <Button
         android:layout_width="match_parent"

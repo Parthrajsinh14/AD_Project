@@ -1,8 +1,10 @@
 package com.example.College_Details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
 
@@ -15,13 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class CollegeList_Admin extends AppCompatActivity {
 
     CollegeAdapter collegeAdapter;
     RecyclerView recyclerView;
-    Button addCollege;
+    FloatingActionButton addCollege;
 
 
     @Override
@@ -35,9 +38,17 @@ public class CollegeList_Admin extends AppCompatActivity {
             return insets;
         });
 
-        addCollege = findViewById(R.id.buttonAddCollege);
+        addCollege = findViewById(R.id.addCollege);
         recyclerView = findViewById(R.id.recyclerViewColleges);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        addCollege.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CollegeList_Admin.this, AddCollege.class));
+            }
+        });
 
         FirebaseRecyclerOptions<CollegeModel> options =
                 new FirebaseRecyclerOptions.Builder<CollegeModel>()

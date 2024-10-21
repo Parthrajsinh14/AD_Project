@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Update Details"
+        android:text="Add Admin"
         android:background="@color/purple"
         android:gravity="center"
         android:textColor="@color/textColor" />
@@ -23,13 +23,14 @@
         android:text="Name" />
 
     <EditText
+        android:id="@+id/adminName"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/rounded"
         android:gravity="center"
-        android:id="@+id/updateName" />
+        android:textColor="@color/black" />
 
     <TextView
         android:layout_width="match_parent"
@@ -38,17 +39,20 @@
         android:textSize="20sp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="Fees" />
+        android:text="Mobile Number" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"
+        android:textColor="@color/black"
+        android:layout_marginRight="10dp"
         android:inputType="number"
-        android:layout_marginRight="10dp"
+        android:maxLength="10"
         android:background="@drawable/rounded"
         android:gravity="center"
-        android:id="@+id/updateFees" />
+        android:id="@+id/adminMobile" />
+
 
     <TextView
         android:layout_width="match_parent"
@@ -57,16 +61,17 @@
         android:textSize="20sp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="Branch" />
+        android:text="Email" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:textColor="@color/black"
         android:background="@drawable/rounded"
         android:gravity="center"
-        android:id="@+id/updateBranch" />
+        android:id="@+id/adminEmail" />
 
     <TextView
         android:layout_width="match_parent"
@@ -75,16 +80,18 @@
         android:textSize="20sp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="Website Link" />
+        android:text="Password" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:textColor="@color/black"
         android:background="@drawable/rounded"
         android:gravity="center"
-        android:id="@+id/updateLink" />
+        android:id="@+id/adminPass" />
+
 
     <Button
         android:layout_width="match_parent"
@@ -92,10 +99,10 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="10dp"
-        android:text="Update"
+        android:text="Add"
         android:textSize="21dp"
         android:textAllCaps="false"
         android:background="@drawable/rounded"
         android:gravity="center"
-        android:id="@+id/btnUpdate" />
+        android:id="@+id/btnAdd" />
 </LinearLayout>

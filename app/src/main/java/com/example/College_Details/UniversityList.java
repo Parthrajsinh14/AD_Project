@@ -3,6 +3,7 @@ package com.example.College_Details;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
@@ -31,7 +32,7 @@ public class UniversityList extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         recyclerView = findViewById(R.id.recyclerViewUniversity);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -40,7 +41,7 @@ public class UniversityList extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("university"),UniversityModel.class)
                         .build();
 
-        universityAdapter = new UniversityAdapter(options,1);
+        universityAdapter = new UniversityAdapter(options,2);
         recyclerView.setAdapter(universityAdapter);
     }
 

@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,11 +35,11 @@ import com.orhanobut.dialogplus.ViewHolder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Profile extends AppCompatActivity {
+public class Profile_Admin extends AppCompatActivity {
 
-    TextView nameValue,emailValue,mobileValue,spiValue;
+    TextView nameValue,emailValue,mobileValue;
     Button logout;
-    FloatingActionButton edit;
+    FloatingActionButton add;
     FirebaseAuth mauth;
     Intent intent;
     SharedPreferences sharedPreferences;
@@ -50,7 +51,7 @@ public class Profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile_admin);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -65,76 +66,86 @@ public class Profile extends AppCompatActivity {
         nameValue = findViewById(R.id.nameValue);
         emailValue = findViewById(R.id.emailValue);
         mobileValue = findViewById(R.id.mobileValue);
-        spiValue = findViewById(R.id.spiValue);
-        edit = findViewById(R.id.editProfile);
+        add = findViewById(R.id.addAdmin);
         logout = findViewById(R.id.btnLogout);
         mauth = FirebaseAuth.getInstance();
         currentUser = mauth.getCurrentUser();
 
         if(currentUser == null){
-            setProfile("NO NAME","---","---",0.0);
+            setProfile("NO NAME","---","---");
             logout.setText("LOGIN");
         } else {
             intent = getIntent();
             String name = intent.getStringExtra("name");
             String email = intent.getStringExtra("email");
             String mobile = intent.getStringExtra("mobile");
-            double spi = intent.getDoubleExtra("spi", 0);
-            setProfile(name,email,mobile,spi);
+            setProfile(name,email,mobile);
         }
 
-        edit.setOnClickListener(new View.OnClickListener() {
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(currentUser==null){
-                    Intent intent1 = new Intent(Profile.this, MainActivity.class);
+                    Intent intent1 = new Intent(Profile_Admin.this, MainActivity.class);
                     startActivity(intent1);
                     return;
                 }
-                final DialogPlus dialogPlus = DialogPlus.newDialog(Profile.this)
-                        .setContentHolder(new ViewHolder(R.layout.update_popup_profile))
-                        .setExpanded(true,1000)
+                final DialogPlus dialogPlus = DialogPlus.newDialog(Profile_Admin.this)
+                        .setContentHolder(new ViewHolder(R.layout.popup_add_admin))
+                        .setExpanded(true,1200)
                         .create();
 
                 View dialogview = dialogPlus.getHolderView();
-                EditText name = dialogview.findViewById(R.id.updateName);
-                EditText number = dialogview.findViewById(R.id.updateMobile);
-                EditText spi = dialogview.findViewById(R.id.updateSpi);
-                Button update = dialogview.findViewById(R.id.btnUpdate);
+                EditText name = dialogview.findViewById(R.id.adminName);
+                EditText number = dialogview.findViewById(R.id.adminMobile);
+                EditText email = dialogview.findViewById(R.id.adminEmail);
+                EditText password = dialogview.findViewById(R.id.adminPass);
 
-                name.setText(nameValue.getText().toString());
-                number.setText(mobileValue.getText().toString());
-                spi.setText(spiValue.getText().toString());
+                Button add = dialogview.findViewById(R.id.btnAdd);
 
-                update.setOnClickListener(new View.OnClickListener() {
+                add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Map<String,Object> data = new HashMap<>();
                         data.put("name",name.getText().toString());
                         data.put("mobile",Long.parseLong(number.getText().toString()));
-                        data.put("spi",Double.parseDouble(spi.getText().toString()));
-                        String email = currentUser.getEmail();
-                        email = email.replace(".","-");
-                        FirebaseDatabase.getInstance().getReference().child("users")
-                                .child(email).updateChildren(data)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        data.put("email",email.getText().toString());
+                        data.put("admin",true);
+                        data.put("spi",0.0);
+
+                        mauth.createUserWithEmailAndPassword(email.getText().toString(),password.getText().toString())
+                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                     @Override
-                                    public void onSuccess(Void unused) {
-                                        Toast.makeText(Profile.this, "Data Updated Successfully", Toast.LENGTH_SHORT).show();
-                                        setProfile(name.getText().toString(),emailValue.getText().toString(),number.getText().toString(),Double.parseDouble(spi.getText().toString()));
-                                        dialogPlus.dismiss();
+                                    public void onSuccess(AuthResult authResult) {
+                                        String id = email.getText().toString();
+                                        id = id.replace(".","-");
+
+                                        FirebaseDatabase.getInstance().getReference().child("users")
+                                                .child(id).setValue(data)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(Profile_Admin.this, "Admin Registered Successfully", Toast.LENGTH_SHORT).show();
+                                                        dialogPlus.dismiss();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(Profile_Admin.this, "Error while registration", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(Profile.this, "Data Updated Failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Profile_Admin.this, "Some Error Occurred", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+
                     }
                 });
-
-
                 dialogPlus.show();
             }
         });
@@ -146,7 +157,7 @@ public class Profile extends AppCompatActivity {
                 if(currentUser!=null){
                     mauth.signOut();
                 }
-                intent = new Intent(Profile.this,MainActivity.class);
+                intent = new Intent(Profile_Admin.this,MainActivity.class);
                 sharedPreferences = getSharedPreferences("MyPrefs",MODE_PRIVATE);
                 editor = sharedPreferences.edit();
                 editor.clear();
@@ -159,12 +170,11 @@ public class Profile extends AppCompatActivity {
     }
 
 
-    public void setProfile(String name,String email,String mobile,double spi){
+    public void setProfile(String name,String email,String mobile){
         if(name!=null){
             nameValue.setText(name);
             emailValue.setText(email);
             mobileValue.setText(mobile);
-            spiValue.setText(String.valueOf(spi));
         } else {
             Toast.makeText(this, "Error in fetching Data", Toast.LENGTH_SHORT).show();
         }

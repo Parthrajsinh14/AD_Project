@@ -8,7 +8,7 @@
     android:padding="16dp"
     android:id="@+id/main"
     android:background="@color/backgroundColor"
-    tools:context=".Profile">
+    tools:context=".Profile_Admin">
 
     <!-- Name Header Background -->
     <View
@@ -92,25 +92,6 @@
                 android:textColor="@color/textColor"
                 android:layout_marginBottom="12dp" />
 
-            <!-- SPI -->
-            <TextView
-                android:id="@+id/spiLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SPI"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@color/colorPrimary" />
-
-            <TextView
-                android:id="@+id/spiValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="9.5"
-                android:textSize="14sp"
-                android:textColor="@color/textColor"
-                android:layout_marginBottom="12dp" />
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -133,16 +114,16 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/editProfile"
+        android:id="@+id/addAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.947"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.845"
-        app:srcCompat="@drawable/edit" />
+        app:srcCompat="@drawable/add_admin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
